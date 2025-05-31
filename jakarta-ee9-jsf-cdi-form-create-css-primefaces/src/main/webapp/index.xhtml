@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      template="/WEB-INF/layouts/main.xhtml">
+
+    <ui:define name="content">
+        <p:panelGrid columns="1">
+
+            <f:facet name="header">
+                #{h1}
+                <br/>
+                <h:outputText value="#{h1}" /><!-- com.kevinpina.controllers.ProductController.header1() -->
+                <br/>
+                <h:outputLabel value="#{h1}"/>
+            </f:facet>
+
+            <h:form id="createFrm">
+                <p:commandButton value="#{messageMyLanguage['product.button.create']}" action="form.xhtml" class="p-my-2"/>
+                <br/>
+                <p:commandLink value="Create Product" action="form.xhtml" /><!-- Use a method post -->
+            </h:form>
+
+            <h:outputText value="No items was found!" rendered="#{empty productList}" class="alert alert-warning" />
+
+            <p:dataTable value="#{productList}" var="p" rendered="#{not empty productList}">
+                <p:column headerText="Id">
+                    <h:outputText value="#{p.id}" />
+                </p:column>
+
+                <p:column headerText="Name">
+                    <h:outputText value="#{p.name}" />
+                </p:column>
+
+                <p:column headerText="SKU">
+                    <h:outputText value="#{p.sku}" />
+                </p:column>
+
+                <p:column headerText="#{messageMyLanguage['product.price']}">
+                    <h:outputText value="#{p.price}" />
+                </p:column>
+
+                <p:column headerText="#{messageMyLanguage['product.date']}">
+                    <h:outputText value="#{p.registryDate}"><!-- Show the date from our region -->
+                        <f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Category">
+                    <h:outputText value="#{p.category.name}" />
+                </p:column>
+
+                <p:column headerText="#{messageMyLanguage['product.button.edit']} (post)">
+                    <h:form id="editFrm">
+                        <p:commandButton value="#{messageMyLanguage['product.button.edit']}" action="#{productController.edit(p.id)}" class="ui-button-success" />
+                    </h:form>
+                </p:column>
+
+                <p:column headerText="Edit (get)">
+                    <h:link value="Edit" outcome="form" class="btn btn-sm btn-info">
+                        <f:param name="id" value="#{p.id}" />
+                    </h:link>
+                </p:column>
+
+                <p:column headerText="Delete">
+                    <h:form id="deleteFrm">
+                        <p:commandButton value="Delete" action="#{productController.delete(p)}" class="ui-button-danger"
+                            onclick="return confirm('Are you sure to delete it?')" />
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </p:panelGrid>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<!-- For JakartaEE 8 version and previous
+    html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" -->
+<!-- For JakartaEE 9 version -->
+<html lang="#{languageController.locale}">
+    <f:view xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:h="http://xmlns.jcp.org/jsf/html"
+          xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+          xmlns:f="http://xmlns.jcp.org/jsf/core"
+          xmlns:p="http://primefaces.org/ui"
+          locale="#{languageController.locale}">
+        <h:head>
+            <meta charset="UTF-8" />
+            <title>#{title}</title><!-- com.kevinpina.controllers.ProductController.title() -->
+            <ui:insert name="head" />
+        </h:head>
+        <h:body>
+            <h:form>
+                <p:menubar>
+                    <p:menuitem value="Back" outcome="index" icon="pi pi-fw pi-home" />
+                    <p:menuitem value="#{messageMyLanguage['menu.text.create']}" outcome="form" icon="pi pi-fw pi-plus" />
+                    <p:menuitem icon="pi pi-fw pi-flag">
+                        <p:selectOneMenu value="#{languageController.language}" valueChangeListener="#{languageController.selectLanguage}"
+                                         onchange="submit()">
+                            <f:selectItem itemLabel="#{messageMyLanguage['menu.text.language']}" itemValue="es" />
+                            <f:selectItems value="#{languageController.supportedLanguages}" />
+                        </p:selectOneMenu>
+                    </p:menuitem>
+                </p:menubar>
+            </h:form>
+
+            <p:card>
+
+                <!-- Need this com.kevinpina.ProducerResources.beanFacesContext()
+                     and validated in com.kevinpina.controllers.ProductController.save() and .delete() -->
+                <p:messages globalOnly="true" closable="true" />
+
+                <ui:insert name="content" />
+
+                <p:divider/>
+
+                <footer style="clear: both;">
+                    <h:graphicImage value="/resources/img/ventas.png" width="45px" alt="logo enterprise"/>
+                    <p><h:outputText value="#{messageMyLanguage['footer.text.author']}" /></p>
+                    <p>#{messageMyLanguage['footer.text.author']}</p>
+                    <ui:insert name="js" />
+                </footer>
+
+            </p:card>
+        </h:body>
+    </f:view>
+</html>
