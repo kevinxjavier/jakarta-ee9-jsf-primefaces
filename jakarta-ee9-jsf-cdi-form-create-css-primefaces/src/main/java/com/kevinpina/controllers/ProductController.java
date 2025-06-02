@@ -4,6 +4,7 @@ import com.kevinpina.ProducerResources;
 import com.kevinpina.entities.Category;
 import com.kevinpina.entities.Product;
 import com.kevinpina.services.ProductService;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.inject.Model;
 import jakarta.enterprise.inject.Produces;
@@ -47,6 +48,20 @@ public class ProductController {
     @Inject
     private ProducerResources producerResources;
 
+    @Getter
+    @Setter
+    private String searchText;
+
+    @Getter
+    @Setter
+    private List<Product> productList;
+
+    // Using this will be the same as the commented code ... @Named("productList") ...
+    @PostConstruct  // By each request will execute this.
+    public void init() {
+        this.productList = productService.listProducts();
+    }
+
     @Produces // Registering in CDI to be retrieving from the view .xhtml
     @Model // @Model resume the use of @RequestScope and @Name "by default the name of method (without get or set prefix)"
     public String title() {
@@ -61,6 +76,7 @@ public class ProductController {
         return "Index JakartaEE10 JSF - Header1";
     }
 
+    /*
     @Produces
     @Named("productList")
     @RequestScoped
@@ -74,6 +90,7 @@ public class ProductController {
 
         return products;
     }
+    */
 
     @Produces // Registering in CDI to be retrive from the view
     @Model // @Model resume the use of @Name "by default the name of method" and @RequestScope
@@ -95,7 +112,6 @@ public class ProductController {
 
     public String save() {
         log.info("--- {}", product);
-        productService.save(product);
 
         if (product.getId() != null && product.getId() > 0) {
             // beanFacesContext.addMessage(null, new FacesMessage("Product Saved " + product.getName())); // By Default FacesMessage.SEVERITY_INFO
@@ -104,7 +120,9 @@ public class ProductController {
             // beanFacesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product Created " + product.getName(), ""));
             beanFacesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, String.format(producerResources.beanBundle().getString("product.text.created"), product.getName()), ""));
         }
-        return "index.xhtml?faces-redirect=true";
+        productService.save(product);
+        this.productList = productService.listProducts();
+        return "index.xhtml";
     }
 
     public String edit(Long id) {
@@ -112,11 +130,15 @@ public class ProductController {
         return "form.xhtml";
     }
 
-    public String delete(Product product) {
+    public void delete(Product product) {
         productService.delete(product.getId());
         // beanFacesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Product Deleted " + product.getName(), ""));
         beanFacesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, String.format(beanBundle.getString("product.text.deleted"), product.getName()), ""));
-        return "index.xhtml?faces-redirect=true";
+        this.productList = productService.listProducts();
+    }
+
+    public void searchByName() {
+        this.productList = productService.searchByName(searchText);
     }
 
 }

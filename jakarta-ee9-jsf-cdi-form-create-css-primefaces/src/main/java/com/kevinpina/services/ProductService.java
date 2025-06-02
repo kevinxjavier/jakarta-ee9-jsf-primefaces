@@ -18,4 +18,6 @@ public interface ProductService {
     List<Category> listCategories();
     Optional<Category> getCategory(Long id);
 
+    List<Product> searchByName(String name);
+
 }
