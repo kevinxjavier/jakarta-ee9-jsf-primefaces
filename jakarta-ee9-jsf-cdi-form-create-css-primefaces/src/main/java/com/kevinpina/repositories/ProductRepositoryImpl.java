@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 @RequestScoped
-public class ProductRepositoryImpl implements CrudRepository<Product> {
+public class ProductRepositoryImpl implements ProductRepository {
 
     @Inject
     private EntityManager entityManager;
@@ -43,4 +43,12 @@ public class ProductRepositoryImpl implements CrudRepository<Product> {
         entityManager.remove(product);
     }
 
+    @Override
+    public List<Product> searchByName(String name) {
+        //String sql = "SELECT p FROM Product p";
+        String sql = "SELECT p FROM Product p LEFT OUTER JOIN FETCH p.category WHERE p.name LIKE :name";
+        return entityManager.createQuery(sql, Product.class)
+                .setParameter("name", "%" + name + "%")
+                .getResultList();
+    }
 }

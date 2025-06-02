@@ -3,6 +3,7 @@ package com.kevinpina.services;
 import com.kevinpina.entities.Category;
 import com.kevinpina.entities.Product;
 import com.kevinpina.repositories.CrudRepository;
+import com.kevinpina.repositories.ProductRepository;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 
@@ -13,7 +14,8 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     @Inject
-    private CrudRepository<Product> productRepository;
+    //private CrudRepository<Product> productRepository;
+    private ProductRepository productRepository;
 
     @Inject
     private CrudRepository<Category> categoryRepository;
@@ -47,5 +49,11 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Category> getCategory(Long id) {
         return Optional.ofNullable(categoryRepository.findBy(id));
     }
+
+    @Override
+    public List<Product> searchByName(String name) {
+        return productRepository.searchByName(name);
+    }
+
 
 }

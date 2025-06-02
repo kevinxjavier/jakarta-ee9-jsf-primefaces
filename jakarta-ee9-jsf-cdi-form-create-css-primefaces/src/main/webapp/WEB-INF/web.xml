@@ -17,6 +17,12 @@
         <url-pattern>*.jsf</url-pattern><!-- The .xhtml will be parse as .jsf -->
     </servlet-mapping>
 
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <!--arya, luna-amber, luna-blue, luna-green, luna-pink, nova-colored, nova-dark, nova-light, saga (Default), vela -->
+        <param-value>luna-green</param-value>
+    </context-param>
+
     <welcome-file-list>
         <welcome-file>/index.jsf</welcome-file>
     </welcome-file-list>

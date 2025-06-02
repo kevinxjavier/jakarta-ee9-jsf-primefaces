@@ -15,39 +15,45 @@
         <h:head>
             <meta charset="UTF-8" />
             <title>#{title}</title><!-- com.kevinpina.controllers.ProductController.title() -->
+            <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
             <ui:insert name="head" />
         </h:head>
         <h:body>
-            <h:form>
-                <p:menubar>
-                    <p:menuitem value="Back" outcome="index" icon="pi pi-fw pi-home" />
-                    <p:menuitem value="#{messageMyLanguage['menu.text.create']}" outcome="form" icon="pi pi-fw pi-plus" />
-                    <p:menuitem icon="pi pi-fw pi-flag">
-                        <p:selectOneMenu value="#{languageController.language}" valueChangeListener="#{languageController.selectLanguage}"
-                                         onchange="submit()">
-                            <f:selectItem itemLabel="#{messageMyLanguage['menu.text.language']}" itemValue="es" />
-                            <f:selectItems value="#{languageController.supportedLanguages}" />
-                        </p:selectOneMenu>
-                    </p:menuitem>
-                </p:menubar>
-            </h:form>
-
             <p:card>
+                <h:form>
+                    <p:menubar>
+                        <p:menuitem value="Back" outcome="index" icon="pi pi-fw pi-home" />
+                        <p:menuitem value="#{messageMyLanguage['menu.text.create']}" onclick="PF('dialogForm1').show()" icon="pi pi-fw pi-plus" />
+                        <p:menuitem icon="pi pi-fw pi-flag">
+                            <p:selectOneMenu value="#{languageController.language}" valueChangeListener="#{languageController.selectLanguage}"
+                                             onchange="submit()">
+                                <f:selectItem itemLabel="#{messageMyLanguage['menu.text.language']}" itemValue="es" />
+                                <f:selectItems value="#{languageController.supportedLanguages}" />
+                            </p:selectOneMenu>
+                        </p:menuitem>
+                    </p:menubar>
+                </h:form>
 
-                <!-- Need this com.kevinpina.ProducerResources.beanFacesContext()
-                     and validated in com.kevinpina.controllers.ProductController.save() and .delete() -->
-                <p:messages globalOnly="true" closable="true" />
+                <div class="p-mb-2">
+                    <!-- Need this com.kevinpina.ProducerResources.beanFacesContext()
+                         and validated in com.kevinpina.controllers.ProductController.save() and .delete() -->
+                    <p:messages globalOnly="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
 
-                <ui:insert name="content" />
+                    <ui:insert name="content" />
+                </div>
 
                 <p:divider/>
 
-                <footer style="clear: both;">
-                    <h:graphicImage value="/resources/img/ventas.png" width="45px" alt="logo enterprise"/>
-                    <p><h:outputText value="#{messageMyLanguage['footer.text.author']}" /></p>
-                    <p>#{messageMyLanguage['footer.text.author']}</p>
-                    <ui:insert name="js" />
-                </footer>
+                <div class="p-mb-2">
+                    <footer style="clear: both;">
+                        <h:graphicImage value="/resources/img/ventas.png" width="45px" alt="logo enterprise"/>
+                        <p><h:outputText value="#{messageMyLanguage['footer.text.author']}" /></p>
+                        <p>#{messageMyLanguage['footer.text.author']}</p>
+                        <ui:insert name="js" />
+                    </footer>
+                </div>
 
             </p:card>
         </h:body>

@@ -19,7 +19,8 @@
     </properties>
 
     <dependencies>
-        <!-- jakarta (JSF 3.0 - JSF 4.X) -->
+
+        <!-- Primefaces-->
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -27,6 +28,14 @@
             <classifier>jakarta</classifier>
         </dependency>
 
+        <!-- PrimeFlex -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>primeflex</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
+        <!-- JakartaEE (JSF 3.0 - JSF 4.X) -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>

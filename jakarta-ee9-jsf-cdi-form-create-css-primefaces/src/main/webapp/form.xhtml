@@ -1,73 +1,92 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/layouts/main.xhtml">
+                xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content">
+    <h:messages style="color: red;" /><!--Show the error messages from form fields-->
+    <!--Delete required="true" from the fields like in
+        <h:inputText id="price" value="#{product.price}" label="Price" />
+        so in Product.class @NotNull validate the price.
+    -->
 
-        <f:metadata>
-            <f:viewParam name="id" value="#{productController.id}" />
-            <!-- Getting <f:param name="id" value="#{p.id}" /> From index.xhtml and Setting to ProductController.id  -->
-        </f:metadata>
+    <f:facet name="header">
+        #{h1}
+        <br/>
+        <h:outputText value="Form Product | #{h1}" />
+    </f:facet>
 
-        <h:messages style="color: red;" /><!--Show the error messages from form fields-->
-        <!--Delete required="true" from the fields like in
-            <h:inputText id="price" value="#{product.price}" label="Price" />
-            so in Product.class @NotNull validate the price.
-        -->
+    <!--#{product.name} calls method product() just 1 time -->
+    <h:form id="formProduct1">
+        <div class="p-field p-grid">
+            <p:outputLabel value="Name" for="name" class="p-col-fiexed" style="width: 200px;" />
+            <div class="p-col">
+                <p:inputText id="name" value="#{productController.product.name}" required="true" label="Name" />
+            </div>
+            <div class="p-col">
+                <p:message for="name" style="color: red;" />
+            </div>
+        </div>
 
-        <p:panelGrid columns="1">
+        <div class="p-field p-grid">
+            <p:outputLabel value="#{messageMyLanguage['product.price']}" for="price" class="p-col-fiexed" style="width: 200px;" />
+            <div class="p-col">
+                <p:inputText id="price" value="#{productController.product.price}" label="Price" />
+            </div>
+            <div class="p-col">
+                <p:message for="price" style="color: red;" />
+            </div>
+        </div>
 
-            <f:facet name="header">
-                #{h1}
-                <br/>
-                <h:outputText value="Form Product | #{h1}" />
-            </f:facet>
+        <div class="p-field p-grid">
+            <p:outputLabel value="Sku" for="sku" class="p-col-fiexed" style="width: 200px;" />
+            <div class="p-col">
+                <p:inputText id="sku" value="#{productController.product.sku}" required="true" label="SKU"  />
+            </div>
+            <div class="p-col">
+                <p:message for="sku" style="color: red;" />
+            </div>
+        </div>
 
-            <p:linkButton outcome="index" value="#{messageMyLanguage['product.button.back']}" class="p-my-2" />
+        <div class="p-field p-grid">
+            <p:outputLabel value="#{messageMyLanguage['product.date']}" for="registryDate" class="p-col-fiexed" style="width: 200px;" />
+            <div class="p-col">
+                <p:datePicker id="registryDate" value="#{productController.product.registryDate}" label="Registry Date" required="true"
+                              pattern="yyyy-MM-dd" converterMessage="Valid format date yyyy-MM-dd" >
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                    <f:passThroughAttribute name="placeholder" value="yyyy-MM-dd" />
+                    <!--f:passThroughAttribute name="type" value="date" /--><!--Show Calendar-->
+                </p:datePicker>
+            </div>
+            <div class="p-col">
+                <p:message for="registryDate" style="color: red;" />
+            </div>
+        </div>
 
-            <!--#{product.name} calls method product() just 1 time -->
-            <h:form>
-                <p:panelGrid columns="3">
-                    <p:outputLabel value="Name" for="name" class="col-form-label" />
-                    <p:inputText id="name" value="#{product.name}" required="true" label="Name" class="form-control" />
-                    <p:message for="name" style="color: red;" />
+        <div class="p-field p-grid">
+            <p:outputLabel value="Category" for="category" class="p-col-fiexed" style="width: 200px;" />
+            <div class="p-col">
+                <p:selectOneMenu id="category" value="#{productController.product.category}" >
+                    <f:selectItem itemLabel="--- Select Category ---" itemValue="#{null}" />
+                    <!--f:selectItems value="#{categories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}" /--><!-- categories is from com.kevinpina.controllers.ProductController.getCategories() -->
+                    <f:selectItems value="#{categories}" var="c" itemLabel="#{c.name}" />
+                    <f:converter binding="#{categoryConverter}" />
+                </p:selectOneMenu>
+            </div>
+            <div class="p-col">
+                <p:message for="category" style="color: red;" />
+            </div>
+        </div>
 
-                    <p:outputLabel value="#{messageMyLanguage['product.price']}" for="price" class="col-form-label" />
-                    <p:inputText id="price" value="#{product.price}" label="Price" class="form-control" />
-                    <p:message for="price" style="color: red;" />
-
-                    <p:outputLabel value="Sku" for="sku" class="col-form-label" />
-                    <p:inputText id="sku" value="#{product.sku}" required="true" label="SKU" class="form-control" />
-                    <p:message for="sku" style="color: red;" />
-
-                    <p:outputLabel value="#{messageMyLanguage['product.date']}" for="registryDate" class="col-form-label" />
-                    <p:datePicker id="registryDate" value="#{product.registryDate}" label="Registry Date" required="true"
-                                  pattern="yyyy-MM-dd" converterMessage="Valid format date yyyy-MM-dd" class="form-control">
-                        <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
-                        <f:passThroughAttribute name="placeholder" value="yyyy-MM-dd" />
-                        <!--f:passThroughAttribute name="type" value="date" /--><!--Show Calendar-->
-                    </p:datePicker>
-                    <p:message for="registryDate" style="color: red;" />
-
-                    <p:outputLabel value="Category" for="category" class="col-form-label" />
-                    <p:selectOneMenu id="category" value="#{product.category}" class="form-select">
-                        <f:selectItem itemLabel="--- Select Category ---" itemValue="#{null}" />
-                        <!--f:selectItems value="#{categories}" var="c" itemLabel="#{c.name}" itemValue="#{c.id}" /--><!-- categories is from com.kevinpina.controllers.ProductController.getCategories() -->
-                        <f:selectItems value="#{categories}" var="c" itemLabel="#{c.name}" />
-                        <f:converter binding="#{categoryConverter}" />
-                    </p:selectOneMenu>
-                    <p:message for="category" style="color: red;" />
-
-                    <p:commandButton value="#{product.id > 0 ? messageMyLanguage['product.button.edit'] : 'Create'} Product" action="#{productController.save}" class="ui-button-outlined ui-button-success" ajax="false" />
-                    <h:inputHidden value="#{product.id}" />
-                    <!--h:inputHidden value="#{product.registryDate}" / -->
-                </p:panelGrid>
-            </h:form>
-        </p:panelGrid>
-
-    </ui:define>
-</ui:composition>
+        <div class="p-field p-grid">
+            <div class="p-col">
+                <p:commandButton value="#{productController.product.id > 0 ? messageMyLanguage['product.button.edit'] : 'Create'} Product"
+                                 action="#{productController.save}"
+                                 class="ui-button-outlined ui-button-success"
+                                 update="@form mi_tabla" />
+            </div>
+            <h:inputHidden value="#{productController.product.id}" />
+            <!--h:inputHidden value="#{product.registryDate}" / -->
+        </div>
+    </h:form>
+</ui:component>
